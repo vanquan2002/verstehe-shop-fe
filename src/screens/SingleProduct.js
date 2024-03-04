@@ -2,18 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { listProductDetails } from "../redux/actions/ProductActions";
+import {
+  createProductReview,
+  listProductDetails,
+} from "../redux/actions/ProductActions";
 import Loading from "../components/loadingError/Loading";
 import Message from "../components/loadingError/Error";
 import { Rate } from "antd";
 import Header from "./../components/Header";
+import { PRODUCT_CREATE_REVIEW_RESET } from "../redux/constants/ProductConstants";
+import moment from "moment";
 
 const SingleProduct = () => {
   const { id } = useParams();
   const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
+  const productCreateReview = useSelector((state) => state.productCreateReview);
+  const {
+    loading: loadingCreateReview,
+    success: successCreateReview,
+    error: errorCreateReview,
+  } = productCreateReview;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   const navigate = useNavigate();
 
   const addToCartHandle = (e) => {
@@ -21,9 +36,19 @@ const SingleProduct = () => {
     navigate(`/cart/${id}?qty=${qty}`);
   };
 
+  const submitHandle = (e) => {
+    e.preventDefault();
+    dispatch(createProductReview(id, { rating, comment }));
+  };
+
   useEffect(() => {
+    if (successCreateReview) {
+      setRating(0);
+      setComment("");
+      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+    }
     dispatch(listProductDetails(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, successCreateReview]);
 
   return (
     <>
@@ -59,7 +84,7 @@ const SingleProduct = () => {
               <div className="border-2 border-indigo-600 m-2 p-2">
                 <p>Review</p>
                 <Rate allowHalf disabled value={product.rating} />
-                <span>21 review</span>
+                <span>{product.numReviews} review</span>
               </div>
               {product.countInStock > 0 && (
                 <>
@@ -85,31 +110,63 @@ const SingleProduct = () => {
           <div className="border-2 border-indigo-600 m-2 p-2">
             <div className="border-2 border-indigo-600 m-2 p-2">
               <p>REVIEWS</p>
-              <div className="border-2 border-indigo-600 m-2 p-2">
-                <h5>Nam Nguyen</h5>
-                <div>(rating)</div>
-                <h4>07/02/2024</h4>
-              </div>
-
-              <div className="border-2 border-indigo-600 m-2 p-2">
-                <h5>Thanh Long</h5>
-                <div>(rating)</div>
-                <h4>15/06/2023</h4>
-              </div>
+              {product.reviews.length === 0 ? (
+                <Message variant="">No review</Message>
+              ) : (
+                product.reviews.map((review, i) => (
+                  <div key={i} className="border-2 border-indigo-600 m-2 p-2">
+                    <h5>{review.name}</h5>
+                    <Rate allowHalf disabled value={review.rating} />
+                    <h4>{moment(review.createdAt).calendar()}</h4>
+                    <div className="border-2 border-indigo-600 m-2 p-2">
+                      {review.comment}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
-
             <div className="border-2 border-indigo-600 m-2 p-2">
               <p>WRITE A CUSTOMER REVIEW</p>
-              <h4>Rating</h4>
-              <select>
-                <option>Poor</option>
-                <option>Fair</option>
-                <option>Good</option>
-                <option>Very Good</option>
-                <option>Excellent</option>
-              </select>
-              <h4>Comment</h4>
-              <button>SUBMIT</button>
+              {loadingCreateReview && <Loading />}
+              {errorCreateReview && (
+                <Message variant="">{errorCreateReview}</Message>
+              )}
+              {userInfo ? (
+                <form className="flex flex-col w-32" onSubmit={submitHandle}>
+                  <strong>Rating</strong>
+                  <select
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                  >
+                    <option value="0">Select...</option>
+                    <option value="1">1 - Poor</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="3">3 - Good</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="5">5 - Excellent</option>
+                  </select>
+                  <strong>Comment</strong>
+                  <textarea
+                    onChange={(e) => setComment(e.target.value)}
+                    className="border-2 border-indigo-600 m-2 p-2"
+                    cols="10"
+                    rows="3"
+                  ></textarea>
+                  <button disabled={loadingCreateReview} type="submit">
+                    SUBMIT
+                  </button>
+                </form>
+              ) : (
+                <Message variant="">
+                  Please{" "}
+                  <strong
+                    onClick={() => navigate(`/login?redirect=products/${id}`)}
+                  >
+                    Login
+                  </strong>{" "}
+                  to write a review
+                </Message>
+              )}
             </div>
           </div>
         </div>

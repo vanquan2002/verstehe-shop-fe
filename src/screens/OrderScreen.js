@@ -1,22 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./../components/Header";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getOrderDetails } from "./../redux/actions/OrderActions";
+import { getOrderDetails, payOrder } from "./../redux/actions/OrderActions";
 import Message from "./../components/loadingError/Error";
 import Loading from "./../components/loadingError/Loading";
-import { moment } from "moment";
+import moment from "moment";
+import { PayPalButton } from "react-paypal-button-v2";
+import axios from "axios";
+import { ORDER_PAY_RESET } from "../redux/constants/OrderConstants";
 
 const OrderScreen = () => {
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+  const orderPay = useSelector((state) => state.orderPay);
+  const { success: successPay, loading: loadingPay } = orderPay;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const successPaymentHandle = (paymentResult) => {
+    dispatch(payOrder(id, paymentResult));
+  };
+
   useEffect(() => {
     dispatch(getOrderDetails(id));
-  }, [id, dispatch]);
+  }, [id, dispatch, userInfo, navigate]);
 
   return (
     <div>
@@ -30,13 +41,13 @@ const OrderScreen = () => {
           <div className="flex border-2 border-indigo-600 m-2 p-2">
             <div className="border-2 border-indigo-600 m-2 p-2">
               <h4>Customer:</h4>
-              <p>{order.user.name}</p>
-              <a href={`mailto:${order.user.email}`}></a>
-              <p>{order.user.email}</p>
+              <p>{order.user?.name}</p>
+              <a href={`mailto:${order.user?.email}`}></a>
+              <p>{order.user?.email}</p>
             </div>
             <div className="border-2 border-indigo-600 m-2 p-2">
               <h4>Order info:</h4>
-              <p>Shipping: {order.shippingAddress.country}</p>
+              <p>Shipping: {order.shippingAddress?.country}</p>
               <p>Pay method: {order.paymentMethod}</p>
               <hr />
               {order.isPaid ? (
@@ -47,9 +58,9 @@ const OrderScreen = () => {
             </div>
             <div className="border-2 border-indigo-600 m-2 p-2">
               <h4>Deliver to:</h4>
-              Address: {order.shippingAddress.city},{" "}
-              {order.shippingAddress.address},{" "}
-              {order.shippingAddress.postalCode}
+              Address: {order.shippingAddress?.city},{" "}
+              {order.shippingAddress?.address},{" "}
+              {order.shippingAddress?.postalCode}
               <hr />
               {order.isDelivered ? (
                 <p>Delivered on {moment(order.deliveredAt).calendar}</p>
@@ -60,10 +71,10 @@ const OrderScreen = () => {
           </div>
           <div className="flex">
             <div className="w-1/3 border-2 border-indigo-600 m-2 p-2">
-              {order.orderItems.length === 0 ? (
+              {order.orderItems?.length === 0 ? (
                 <Message variant="alert-danger">Your order is empty</Message>
               ) : (
-                order.orderItems.map((item, i) => (
+                order.orderItems?.map((item, i) => (
                   <div
                     key={i}
                     className="flex border-2 border-indigo-600 m-2 p-2"
@@ -92,8 +103,7 @@ const OrderScreen = () => {
                 <p>Tax: ${order.taxPrice}</p>
                 <p>Total: ${order.totalPrice}</p>
               </div>
-              <div>PayPal</div>
-              <div>PayPal</div>
+              {!order.isPaid && <h4>PAY</h4>}
             </div>
           </div>
         </>
