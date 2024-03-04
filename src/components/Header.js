@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +15,15 @@ const Header = () => {
   const { userInfo } = userLogin;
   const logoutHandle = () => {
     dispatch(logout());
+  };
+  const [keyword, setKeyword] = useState("");
+  const submitHandle = (e) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+      navigate(`/search/${keyword}`);
+    } else {
+      navigate(`/`);
+    }
   };
 
   return (
@@ -33,9 +42,14 @@ const Header = () => {
       </div>
       <div className="flex justify-between px-48 border-2 border-indigo-600 m-2 p-2">
         <p onClick={() => navigate("/")}>LOGO</p>
-        <form className="border-2 border-indigo-600 m-2 p-2">
-          <input type="email" name="email" placeholder="Search..." />
-          <input type="submit" value="Search" name="search" />
+        <form onSubmit={submitHandle}>
+          <input
+            onChange={(e) => setKeyword(e.target.value)}
+            className="border-2 border-indigo-600 m-2 p-2"
+            type="text"
+            placeholder="Search..."
+          />
+          {/* <input type="submit" value="Search" name="search" /> */}
         </form>
         <div className="flex gap-x-4 ">
           {userInfo ? (

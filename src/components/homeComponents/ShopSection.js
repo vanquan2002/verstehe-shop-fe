@@ -8,16 +8,15 @@ import Loading from "./../loadingError/Loading";
 import Message from "./../loadingError/Error";
 const ContainerStyled = styled.div``;
 
-const ShopSection = () => {
+const ShopSection = ({ keyword, pageNumber }) => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, page, pages } = productList;
 
   useEffect(() => {
-    dispatch(listProduct());
-  }, [dispatch]);
+    dispatch(listProduct(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
   return (
     <div className="">
@@ -29,7 +28,7 @@ const ShopSection = () => {
         ) : (
           products.map((product, i) => (
             <div
-              onClick={() => navigate(`products/${product._id}`)}
+              onClick={() => navigate(`/products/${product._id}`)}
               className="flex w-3/12 flex-col items-center border-2 border-indigo-600 p-2"
               key={i}
             >
@@ -41,7 +40,7 @@ const ShopSection = () => {
           ))
         )}
       </div>
-      <Pagination />
+      <Pagination page={page} pages={pages} keyword={keyword} />
     </div>
   );
 };

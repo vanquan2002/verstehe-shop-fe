@@ -19,6 +19,12 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<HomeScreen />} />
+          <Route path="/page/:pageNumber" element={<HomeScreen />} />
+          <Route path="/search/:keyword" element={<HomeScreen />} />
+          <Route
+            path="/search/:keyword/page/:pageNumber"
+            element={<HomeScreen />}
+          />
           <Route path="/products/:id" element={<SingleProduct />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/register" element={<Register />} />
