@@ -14,7 +14,7 @@ import axios from "axios";
 import { logout } from "./UserActions";
 
 export const listProduct =
-  (keyword = " ", pageNumber = "") =>
+  (keyword = "", pageNumber = "") =>
   async (dispatch) => {
     try {
       dispatch({

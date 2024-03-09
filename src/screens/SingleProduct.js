@@ -62,12 +62,7 @@ const SingleProduct = () => {
           <div className="border-2 border-indigo-600 m-2 p-2">
             <img width={500} src={product.image} alt="" />
             <p>{product.name}</p>
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to
-            </p>
+            <p>{product.description}</p>
             <div className="border-2 border-indigo-600 m-2 p-2">
               <div className="border-2 border-indigo-600 m-2 p-2">
                 <p>Price</p>
