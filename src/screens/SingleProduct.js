@@ -4,7 +4,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createProductReview,
-  listProductDetails,
+  detailsProduct,
 } from "../redux/actions/ProductActions";
 import Loading from "../components/loadingError/Loading";
 import Message from "../components/loadingError/Error";
@@ -47,7 +47,7 @@ const SingleProduct = () => {
       setComment("");
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
     }
-    dispatch(listProductDetails(id));
+    dispatch(detailsProduct(id));
   }, [dispatch, id, successCreateReview]);
 
   return (
