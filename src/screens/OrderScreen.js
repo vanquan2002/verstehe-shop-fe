@@ -13,21 +13,40 @@ import { ORDER_PAY_RESET } from "../redux/constants/OrderConstants";
 const OrderScreen = () => {
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const [sdkReadty, setSdkReadty] = useState(false);
   const orderPay = useSelector((state) => state.orderPay);
   const { success: successPay, loading: loadingPay } = orderPay;
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { id } = useParams();
 
   const successPaymentHandle = (paymentResult) => {
     dispatch(payOrder(id, paymentResult));
   };
 
   useEffect(() => {
+    // const addPayPalScript = async () => {
+    //   const { data: clientId } = await axios.get("/api/config/paypal");
+    //   const script = document.createElement("script");
+    //   script.type = "text/javascript";
+    //   script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+    //   script.async = true;
+    //   script.onload = () => {
+    //     setSdkReadty(true);
+    //   };
+    //   document.body.appendChild(script);
+    // };
+    // if (!order || successPay) {
+    //   dispatch({ type: ORDER_PAY_RESET });
+    //   dispatch(getOrderDetails(id));
+    // } else if (!order.isPaid) {
+    //   if (!window.paypal) {
+    //     addPayPalScript();
+    //   } else {
+    //     setSdkReadty(true);
+    //   }
+    // }
     dispatch(getOrderDetails(id));
-  }, [id, dispatch, userInfo, navigate]);
+  }, [id, dispatch, successPay]);
 
   return (
     <div>
@@ -105,7 +124,15 @@ const OrderScreen = () => {
               <p>Tax: ${order.taxPrice}</p>
               <p>Total: ${order.totalPrice}</p>
             </div>
-            {!order.isPaid && <h4>PAY</h4>}
+            {!order.isPaid &&
+              (loadingPay ? (
+                <Loading />
+              ) : (
+                <PayPalButton
+                  amount={order.totalPrice}
+                  onSuccess={successPaymentHandle}
+                />
+              ))}
           </div>
         </div>
       )}

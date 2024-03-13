@@ -102,11 +102,7 @@ export const payOrder =
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const { data } = await axios.put(
-        `/api/orders/${orderId}/pay`,
-        paymentResult,
-        config
-      );
+      await axios.put(`/api/orders/${orderId}/pay`, paymentResult, config);
       dispatch({
         type: ORDER_PAY_SUCCESS,
       });
