@@ -12,10 +12,20 @@ import OrderScreen from "./screens/OrderScreen";
 import NotFound from "./screens/NotFound";
 import "./App.css";
 import PrivateRouter from "./PrivateRouter";
+import { ConfigProvider } from "antd";
 
 function App() {
   return (
-    <div className="App">
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#202020",
+          borderRadius: 2,
+        },
+        components: {},
+      }}
+      className="App"
+    >
       <BrowserRouter>
         <Routes>
           <Route index element={<HomeScreen />} />
@@ -52,7 +62,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </ConfigProvider>
   );
 }
 

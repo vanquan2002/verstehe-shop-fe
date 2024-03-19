@@ -1,28 +1,48 @@
 import React from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const ContainerStyled = styled.div``;
-
-const Pagination = ({ page, pages, keyword = "" }) => {
+const Pagination = ({ page, pages, keyword }) => {
   const navigate = useNavigate();
 
+  const handlePageClick = (newPage) => {
+    const route = keyword
+      ? `/search/${keyword}/page/${newPage}`
+      : `/page/${newPage}`;
+    navigate(route);
+  };
+
   return (
-    <div className="flex gap-x-5">
-      {pages > 1 &&
-        [...Array(pages).keys()].map((x) => (
+    pages > 1 && (
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <div
+          onClick={() => handlePageClick(Math.max(1, page - 1))}
+          className="text-firePrimary cursor-pointer"
+        >
+          pre
+        </div>
+        {Array.from({ length: pages }, (_, x) => x + 1).map((x) => (
           <div
-            onClick={() =>
-              navigate(
-                keyword ? `/search/${keyword}/page/${x + 1}` : `/page/${x + 1}`
-              )
-            }
             key={x + 1}
+            onClick={() => handlePageClick(x)}
+            className="text-firePrimary cursor-pointer"
           >
-            {x + 1}
+            <p
+              className={`${
+                x === page && "font-bold border-firePrimary border-b-2"
+              }`}
+            >
+              {x}
+            </p>
           </div>
         ))}
-    </div>
+        <div
+          onClick={() => handlePageClick(Math.min(pages, page + 1))}
+          className="text-firePrimary cursor-pointer"
+        >
+          nex
+        </div>
+      </div>
+    )
   );
 };
 
