@@ -8,7 +8,9 @@ import {
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
-  PRODUCT_CREATE_REVIEW_RESET,
+  PRODUCT_RELATED_REQUEST,
+  PRODUCT_RELATED_SUCCESS,
+  PRODUCT_RELATED_FAIL,
 } from "../constants/ProductConstants";
 import axios from "axios";
 import { logout } from "./UserActions";
@@ -51,6 +53,27 @@ export const detailsProduct = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const relatedProducts = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: PRODUCT_RELATED_REQUEST,
+    });
+    const { data } = await axios.get(`/api/products/related/${id}`);
+    dispatch({
+      type: PRODUCT_RELATED_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_RELATED_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

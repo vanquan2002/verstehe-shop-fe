@@ -19,7 +19,15 @@ module.exports = {
         whitePrimary: "rgb(225,220,224)",
         purplePrimary: "rgb(81,29,129)",
       },
+      truncate: {
+        lines: {
+          2: "2",
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("tailwind-scrollbar")({ preferredStrategy: "pseudoelements" }),
+  ],
 };

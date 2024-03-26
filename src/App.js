@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
-import SingleProduct from "./screens/SingleProduct";
+import SingleProductScreen from "./screens/SingleProductScreen";
 import LogIn from "./screens/LogIn";
 import Register from "./screens/Register";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -35,7 +35,7 @@ function App() {
             path="/search/:keyword/page/:pageNumber"
             element={<HomeScreen />}
           />
-          <Route path="/products/:id" element={<SingleProduct />} />
+          <Route path="/products/:id" element={<SingleProductScreen />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/register" element={<Register />} />
           <Route path="/cart/:id?" element={<CartScreen />} />

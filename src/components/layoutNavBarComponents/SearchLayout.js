@@ -39,7 +39,7 @@ const SearchLayout = ({ result }) => {
     >
       <div className={`w-[300px] md:w-[500px] h-screen bg-whitePrimary`}>
         <div className="flex flex-col items-center pt-32">
-          <div className="flex justify-between items-center md:w-80 w-60 mb-5">
+          <div className="flex justify-between items-center md:w-[22rem] w-60 mb-5">
             <p className="text-darkPrimary font-medium">SEARCH</p>
             <MdClose
               onClick={layoutSearchHandle}
@@ -55,7 +55,7 @@ const SearchLayout = ({ result }) => {
               <input
                 ref={inputRef}
                 onChange={(e) => setKeyword(e.target.value)}
-                className="md:w-80 w-60 px-6 py-3 placeholder:text-[0.9rem] placeholder:text-darkPrimary outline-none bg-firePrimary"
+                className="md:w-[22rem] w-60 px-6 py-3 placeholder:text-[0.9rem] placeholder:text-darkPrimary outline-none bg-firePrimary"
                 type="text"
                 placeholder="Tìm kiếm sản phẩm..."
                 value={keyword}

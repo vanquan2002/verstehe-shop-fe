@@ -9,6 +9,9 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
   PRODUCT_CREATE_REVIEW_RESET,
+  PRODUCT_RELATED_REQUEST,
+  PRODUCT_RELATED_SUCCESS,
+  PRODUCT_RELATED_FAIL,
 } from "../constants/ProductConstants";
 
 export const productsReducers = (state = { products: [] }, action) => {
@@ -23,6 +26,22 @@ export const productsReducers = (state = { products: [] }, action) => {
         products: action.payload.products,
       };
     case PRODUCT_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const productsRelatedReducers = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case PRODUCT_RELATED_REQUEST:
+      return { loading: true, products: [] };
+    case PRODUCT_RELATED_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload,
+      };
+    case PRODUCT_RELATED_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

@@ -30,8 +30,8 @@ const Header = () => {
   };
 
   return (
-    <MainStyled className={`sticky top-0 z-10`}>
-      <div className="flex justify-between bg-whitePrimary items-center md:min-h-20 min-h-16 md:px-10 px-5 sticky top-0 ">
+    <MainStyled className={`sticky top-0 z-20`}>
+      <div className="flex justify-between bg-whitePrimary items-center md:min-h-16 min-h-16 md:px-10 px-5 sticky top-0 ">
         <div className="flex items-center">
           <p
             className="md:text-5xl text-darkPrimary md:font-extrabold font-bold text-3xl cursor-pointer"
@@ -56,7 +56,12 @@ const Header = () => {
               className="cursor-pointer text-darkPrimary"
             />
           </Badge>
-          <p onClick={layoutMenuHandle}>MENU</p>
+          <p
+            className="cursor-pointer text-darkPrimary"
+            onClick={layoutMenuHandle}
+          >
+            MENU
+          </p>
         </div>
       </div>
     </MainStyled>

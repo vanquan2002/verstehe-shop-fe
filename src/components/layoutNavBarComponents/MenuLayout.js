@@ -21,7 +21,7 @@ const MenuLayout = ({ result }) => {
           : "translate-x-[500px] duration-500"
       } `}
     >
-      <div className={`w-[300px] md:w-[500px] h-screen bg-primary`}>
+      <div className={`w-[300px] md:w-[500px] h-screen bg-whitePrimary`}>
         <div className="flex flex-col items-center pt-32">
           <p onClick={layoutSearchHandle}>Close menu layout</p>
         </div>

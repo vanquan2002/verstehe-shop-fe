@@ -14,35 +14,41 @@ const Contents = ({ keyword, pageNumber }) => {
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, page, pages } = productList;
 
+  const formatDataWithBr = (text) => {
+    const sentences = text.split(".");
+    const firstSentence = sentences[0];
+    return (
+      <div className="text-whitePrimary text-sm truncate">{firstSentence}</div>
+    );
+  };
+
   useEffect(() => {
     dispatch(listProduct(keyword, pageNumber));
   }, [dispatch, keyword, pageNumber]);
 
   return (
-    <div className="p-5">
+    <div className="p-5 my-7">
       {loading ? (
         <Loading />
       ) : error ? (
-        <Message variant="alert-danger">{error}</Message>
+        <Message>{error}</Message>
       ) : (
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-3">
           {products.map((product, i) => (
             <div
               onClick={() => navigate(`/products/${product._id}`)}
-              className={`p-4 border border-gray-400 ${
-                i % 3 === 0 ? "" : "border-l-0"
-              } ${
-                i >= products.length - (products.length % 3)
-                  ? `border-b-${products.length % 3 === 1 ? "l" : "r"}-0`
-                  : ""
-              } ${i < products.length - 3 ? "border-b-0" : ""}`}
+              className={`p-4 border border-whitePrimary border-opacity-50 ${
+                i % 3 === 0 ? "" : "md:border-l-0"
+              } ${i < products.length - 1 ? "border-b-0 md:border-b" : ""}`}
               key={i}
             >
-              <img className="w-full" src={product.image} alt="" />
-              <p className="font-extrabold text-xl uppercase text-whitePrimary">
+              <img className="w-full" src={product.images?.[0]} alt="" />
+              <p className="font-extrabold text-xl uppercase line-clamp-2 text-whitePrimary">
                 {product.name}
               </p>
-              <p className="text-whitePrimary text-sm">{product.description}</p>
+              <div className="my-2">
+                {formatDataWithBr(product.description)}
+              </div>
               <p className="text-firePrimary text-xl font-extrabold text-right">
                 {product.price} VND
               </p>

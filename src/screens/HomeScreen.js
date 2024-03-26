@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Footer from "../components/Footer";
 import Contents from "../components/homeComponents/Contents";
 import CalltoActionSection from "../components/homeComponents/CalltoActionSection";
-import ContactInfo from "../components/homeComponents/ContactInfo";
+import Introduce from "../components/homeComponents/Introduce";
 import { useParams } from "react-router-dom";
 import Header from "../components/headerComponents/Header";
 import SearchLayout from "../components/layoutNavBarComponents/SearchLayout";
@@ -16,13 +16,10 @@ import Banner from "./../components/homeComponents/Banner";
 export default function HomeScreen() {
   const { keyword } = useParams();
   const { pageNumber } = useParams();
-
   const setLayout = useSelector((state) => state.setLayout);
   const { result } = setLayout;
-
   const dispatch = useDispatch();
-
-  const layoutSearchHandle = () => {
+  const setLayoutHandle = () => {
     dispatch(setLayoutResetActions());
   };
 
@@ -36,22 +33,21 @@ export default function HomeScreen() {
         }`}
       >
         <div
-          className={`z-20 fixed top-0 left-0 h-full w-full bg-black bg-opacity-75 transition-opacity duration-300 ${
+          className={`z-30 fixed top-0 left-0 h-full w-full bg-black bg-opacity-75 transition-opacity duration-300 ${
             result
               ? "opacity-100 pointer-events-auto"
               : "opacity-0 pointer-events-none"
           }`}
-          onClick={layoutSearchHandle}
+          onClick={setLayoutHandle}
         ></div>
         <Header />
         <Marquees />
-        <Banner />
+        <Banner positions={"top"} />
         <Marquees />
-
         <Contents pageNumber={pageNumber} keyword={keyword} />
-        {/* <CalltoActionSection /> */}
-        {/* <ContactInfo /> */}
-        {/* <Footer /> */}
+        <Banner positions={"bottom"} />
+        <Introduce />
+        <Footer />
       </div>
 
       <SearchLayout result={result === "search" ? true : false} />

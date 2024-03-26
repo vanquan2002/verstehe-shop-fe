@@ -1,11 +1,16 @@
 import React from "react";
 
-import bannerImg from "../../assets/banner1.webp";
+import bannerTopImg from "../../assets/banner1.webp";
+import bannerBottomImg from "../../assets/banner2.webp";
 
-const Banner = () => {
+const Banner = ({ positions }) => {
   return (
     <div>
-      <img className="w-full" src={bannerImg} alt="" />
+      {positions === "top" ? (
+        <img className="w-full" src={bannerTopImg} alt="" />
+      ) : (
+        <img className="w-full" src={bannerBottomImg} alt="" />
+      )}
     </div>
   );
 };
