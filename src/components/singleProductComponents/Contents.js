@@ -92,7 +92,7 @@ const Contents = ({ id, product, loading, error }) => {
       ) : error ? (
         <Message>{error}</Message>
       ) : (
-        <div className="grid grid-cols-2 gap-6 mt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
           <div className="col-span-1 z-0">
             <ImageList images={product.images} />
           </div>
@@ -105,13 +105,18 @@ const Contents = ({ id, product, loading, error }) => {
                 </span>
               )}
             </p>
-            <p className="text-2xl font-bold text-firePrimary ml-4 mb-8">
+            <p className="text-2xl font-bold text-firePrimary ml-0 lg:ml-4 md:ml-4 mb-8">
               {product.price} VND
             </p>
             <div className="mb-12">
               <div className="flex items-end">
                 <p className="w-full uppercase text-white font-medium">Size:</p>
-                <div className="flex gap-6 w-full justify-start">
+                <div
+                  className={`flex gap-6 w-full justify-start ${
+                    product.countInStock === 0 &&
+                    "opacity-50 pointer-events-none"
+                  }`}
+                >
                   {product.sizes?.map((item, i) => (
                     <div
                       key={i}
@@ -216,7 +221,7 @@ const Contents = ({ id, product, loading, error }) => {
               <div className="w-full flex items-center gap-3">
                 <RateStyled allowHalf disabled value={product.rating} />
                 <p className="text-white font-medium">
-                  ( {product.numReviews} review )
+                  ( {product.numReviews} )
                 </p>
               </div>
             </div>

@@ -20,11 +20,11 @@ const ArrowStyled = styled.div`
   background-position: center;
   background-size: 40px;
   background-repeat: no-repeat;
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   background-color: rgb(225, 220, 224);
   border-radius: 100%;
-  ${(props) => (props.right === "right" ? "right: -15px;" : "left: -15px;")}
+  ${(props) => (props.right === "right" ? "right: -28px;" : "left: -28px;")}
   background-image: url(${(props) => props.url});
   &:before {
     content: "";
@@ -36,11 +36,9 @@ const ArrowStyled = styled.div`
     background-image: url(${(props) => props.url});
     background-color: rgb(225, 220, 224);
   }
-  transition: 0.4s;
-  ${(props) => (props.isnavigation === "true" ? "opacity: 1;" : "opacity: 0;")}
 `;
 function SampleArrow(props) {
-  const { className, style, onClick, right, url, isnavigation } = props;
+  const { className, style, onClick, right, url } = props;
   return (
     <ArrowStyled
       className={className}
@@ -48,20 +46,11 @@ function SampleArrow(props) {
       onClick={onClick}
       right={right}
       url={url}
-      isnavigation={isnavigation}
     />
   );
 }
 
 const RelatedProducts = ({ id }) => {
-  const [isNavigation, setIsNavigation] = useState(false);
-
-  const handleMouseEnter = () => {
-    setIsNavigation(true);
-  };
-  const handleMouseLeave = () => {
-    setIsNavigation(false);
-  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const productsRelated = useSelector((state) => state.productsRelated);
@@ -74,26 +63,25 @@ const RelatedProducts = ({ id }) => {
       <div className="text-whitePrimary text-sm truncate">{firstSentence}</div>
     );
   };
-
   const settings = {
-    infinite: false,
+    infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    nextArrow: (
-      <SampleArrow
-        isnavigation={isNavigation ? "true" : "false"}
-        right="right"
-        url="/svgs/right-svgrepo-com.svg"
-      />
-    ),
-    prevArrow: (
-      <SampleArrow
-        isnavigation={isNavigation ? "true" : "false"}
-        url="/svgs/left-svgrepo-com.svg"
-      />
-    ),
+    nextArrow: <SampleArrow right="right" url="/svgs/right-svgrepo-com.svg" />,
+    prevArrow: <SampleArrow url="/svgs/left-svgrepo-com.svg" />,
   };
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(relatedProducts(id));
@@ -105,38 +93,65 @@ const RelatedProducts = ({ id }) => {
         Các sản phẩm liên quan
       </p>
       <div
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        className="slider-container mt-3 border border-whitePrimary border-opacity-50"
+        className={`slider-container mt-3 ${
+          windowWidth > 1024 && "border border-whitePrimary border-opacity-50"
+        }`}
       >
         {loading ? (
           <Loading />
         ) : error ? (
           <Message>{error}</Message>
         ) : (
-          <Slider {...settings}>
-            {products.map((product, i) => (
-              <div
-                style={{ margin: "10px" }}
-                onClick={() => navigate(`/products/${product._id}`)}
-                className={`p-4 ${
-                  products.length - 1 === i ? "border-r-0" : "border-r"
-                }  border-whitePrimary border-opacity-50 `}
-                key={i}
-              >
-                <img src={product.images?.[0]} alt="" />
-                <p className="font-extrabold text-xl uppercase line-clamp-2 text-whitePrimary">
-                  {product.name}
-                </p>
-                <div className="my-2">
-                  {formatDataWithBr(product.description)}
-                </div>
-                <p className="text-firePrimary text-xl font-extrabold text-right">
-                  {product.price} VND
-                </p>
+          <div>
+            {windowWidth > 1024 ? (
+              <Slider {...settings}>
+                {products.map((product, i) => (
+                  <div
+                    style={{ margin: "10px" }}
+                    onClick={() => navigate(`/products/${product._id}`)}
+                    className={`p-4 ${
+                      products.length - 1 === i ? "border-r-0" : "border-r"
+                    }  border-whitePrimary border-opacity-50 `}
+                    key={i}
+                  >
+                    <img src={product.images?.[0]} alt="" />
+                    <p className="font-extrabold text-xl uppercase line-clamp-2 text-whitePrimary">
+                      {product.name}
+                    </p>
+                    <div className="my-2">
+                      {formatDataWithBr(product.description)}
+                    </div>
+                    <p className="text-firePrimary text-xl font-extrabold text-right">
+                      {product.price} VND
+                    </p>
+                  </div>
+                ))}
+              </Slider>
+            ) : (
+              <div className="">
+                {products.map((product, i) => (
+                  <div
+                    onClick={() => navigate(`/products/${product._id}`)}
+                    className={`p-4 border border-whitePrimary border-opacity-50 lg:border-l-0 lg:border-b ${
+                      i < products.length - 1 ? "border-b-0" : ""
+                    }`}
+                    key={i}
+                  >
+                    <img className="w-full" src={product.images?.[0]} alt="" />
+                    <p className="font-extrabold text-xl uppercase line-clamp-2 text-whitePrimary">
+                      {product.name}
+                    </p>
+                    <div className="my-2">
+                      {formatDataWithBr(product.description)}
+                    </div>
+                    <p className="text-firePrimary text-xl font-extrabold text-right">
+                      {product.price} VND
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </Slider>
+            )}
+          </div>
         )}
       </div>
     </ContainerStyled>

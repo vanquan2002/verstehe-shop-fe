@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLayoutResetActions } from "../../redux/actions/LayoutActions";
-import { addToCart, removeFromCart } from "../../redux/actions/CartActions";
+import { removeFromCart } from "../../redux/actions/CartActions";
 import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 
@@ -15,14 +15,19 @@ const CartLayout = ({ result }) => {
     dispatch(removeFromCart(id));
   };
   const checkOutHandle = () => {
+    dispatch(setLayoutResetActions());
     navigate("/login?redirect=shipping");
   };
-  const layoutCartHandle = () => {
+  const layoutResetCartHandle = () => {
     dispatch(setLayoutResetActions());
   };
-  const navigateHandle = (product) => {
+  const navigateProductHandle = (product) => {
     dispatch(setLayoutResetActions());
     navigate(`/products/${product}`);
+  };
+  const navigateCartHandle = () => {
+    dispatch(setLayoutResetActions());
+    navigate("/cart");
   };
   const containerCartRef = useRef(null);
   const preventWindowScroll = (e) => {
@@ -48,12 +53,12 @@ const CartLayout = ({ result }) => {
       <div
         ref={containerCartRef}
         onWheel={(e) => wheelCart(e)}
-        className={`w-[300px] md:w-[500px] h-screen p-14 bg-whitePrimary scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-white overflow-y-auto`}
+        className={`w-[350px] md:w-[500px] h-screen p-7 md:p-14 bg-whitePrimary scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-white overflow-y-auto`}
       >
         <div className="flex justify-between items-center mb-10">
           <p className="text-darkPrimary font-medium uppercase">Giỏ hàng</p>
           <MdClose
-            onClick={layoutCartHandle}
+            onClick={layoutResetCartHandle}
             size="2.1rem"
             className="cursor-pointer"
           />
@@ -68,27 +73,27 @@ const CartLayout = ({ result }) => {
           <div className="">
             {cartItems.map((item, i) => (
               <div
-                className={`flex items-center gap-5 ${
+                className={`flex items-center gap-3 md:gap-5 ${
                   cartItems.length - 1 > i &&
                   "border-b border-darkPrimary border-opacity-15 pb-6 mb-6"
                 }`}
                 key={i}
               >
                 <img
-                  onClick={() => navigateHandle(item.product)}
+                  onClick={() => navigateProductHandle(item.product)}
                   className="w-20 cursor-pointer"
                   src={item.image}
                   alt=""
                 />
-                <div className="flex items-start gap-5">
+                <div className="flex items-start gap-1 md:gap-5">
                   <div className="flex flex-col gap-1">
                     <p
-                      onClick={() => navigateHandle(item.product)}
+                      onClick={() => navigateProductHandle(item.product)}
                       className="line-clamp-2 font-semibold text-sm cursor-pointer"
                     >
                       {item.name}
                     </p>
-                    <div className="flex justify-between items-center pr-7">
+                    <div className="flex justify-between items-center pr-0 md:pr-7">
                       <p className="text-sm text-darkPrimary text-opacity-60 font-medium">
                         Size: <span className="uppercase">{item.size}</span>
                       </p>
@@ -96,9 +101,9 @@ const CartLayout = ({ result }) => {
                         {item.color}
                       </p>
                     </div>
-                    <div className="flex justify-between items-center pr-7">
+                    <div className="flex justify-between items-center pr-0 md:pr-7">
                       <p className="text-sm text-darkPrimary text-opacity-60 font-medium">
-                        Số lượng: {item.qty}
+                        {item.qty}
                       </p>
                       <p className="text-sm text-darkPrimary text-opacity-60 font-semibold">
                         {item.price} VND
@@ -120,15 +125,15 @@ const CartLayout = ({ result }) => {
               </p>
               <p className="text-base text-darkPrimary">{total} VND</p>
             </div>
-            <div className="flex items-center justify-between mt-7 gap-5">
+            <div className="flex items-center justify-between mt-7 gap-6">
               <button
-                onClick={() => navigate("/cart")}
-                className="w-full px-6 py-4 bg-firePrimary font-semibold text-sm uppercase text-darkPrimary"
+                onClick={navigateCartHandle}
+                className="w-full px-3 md:px-6 py-3 md:py-4 bg-firePrimary font-semibold text-xs md:text-sm uppercase text-darkPrimary"
               >
                 Xem giỏ hàng
               </button>
               <button
-                className="w-full px-6 py-4 bg-firePrimary font-semibold text-sm uppercase text-darkPrimary"
+                className="w-full px-3 md:px-6 py-3 md:py-4 bg-firePrimary font-semibold text-xs md:text-sm uppercase text-darkPrimary"
                 onClick={checkOutHandle}
               >
                 Thanh toán

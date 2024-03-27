@@ -1,17 +1,18 @@
-import React from "react";
 import Footer from "../components/Footer";
-import Contents from "../components/homeComponents/Contents";
-import Introduce from "../components/homeComponents/Introduce";
 import Header from "../components/headerComponents/Header";
-import SearchLayout from "../components/layoutNavBarComponents/SearchLayout";
-import { useSelector, useDispatch } from "react-redux";
-import { setLayoutResetActions } from "./../redux/actions/LayoutActions";
 import CartLayout from "../components/layoutNavBarComponents/CartLayout";
-import MenuLayout from "./../components/layoutNavBarComponents/MenuLayout";
-import Marquees from "./../components/homeComponents/Marquees";
-import Banner from "./../components/homeComponents/Banner";
+import MenuLayout from "../components/layoutNavBarComponents/MenuLayout";
+import SearchLayout from "../components/layoutNavBarComponents/SearchLayout";
+import { setLayoutResetActions } from "../redux/actions/LayoutActions";
+import Contents from "./../components/productsComponents/Contents";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import Breadcrumbs from "../components/Breadcrumbs";
 
-export default function HomeScreen() {
+const ProductsScreen = () => {
+  const { keyword } = useParams();
+  const { pageNumber } = useParams();
   const setLayout = useSelector((state) => state.setLayout);
   const { result } = setLayout;
   const dispatch = useDispatch();
@@ -37,13 +38,9 @@ export default function HomeScreen() {
           onClick={resetLayoutHandle}
         ></div>
         <Header />
-        <div>
-          <Marquees />
-          <Banner positions={"top"} />
-          <Marquees />
-          <Contents />
-          <Banner positions={"bottom"} />
-          <Introduce />
+        <div className="px-5">
+          <Breadcrumbs offBorderBottom={true} textContent="Tất cả sản phẩm" />
+          <Contents keyword={keyword} pageNumber={pageNumber} />
         </div>
         <Footer />
       </div>
@@ -53,4 +50,6 @@ export default function HomeScreen() {
       <MenuLayout result={result === "menu" ? true : false} />
     </div>
   );
-}
+};
+
+export default ProductsScreen;

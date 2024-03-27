@@ -13,6 +13,7 @@ import NotFound from "./screens/NotFound";
 import "./App.css";
 import PrivateRouter from "./PrivateRouter";
 import { ConfigProvider } from "antd";
+import ProductsScreen from "./screens/ProductsScreen";
 
 function App() {
   return (
@@ -29,11 +30,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<HomeScreen />} />
-          <Route path="/page/:pageNumber" element={<HomeScreen />} />
-          <Route path="/search/:keyword" element={<HomeScreen />} />
+          <Route path="/products" element={<ProductsScreen />} />
           <Route
-            path="/search/:keyword/page/:pageNumber"
-            element={<HomeScreen />}
+            path="/products/page/:pageNumber"
+            element={<ProductsScreen />}
+          />
+          <Route
+            path="/products/search/:keyword"
+            element={<ProductsScreen />}
+          />
+          <Route
+            path="/products/search/:keyword/page/:pageNumber"
+            element={<ProductsScreen />}
           />
           <Route path="/products/:id" element={<SingleProductScreen />} />
           <Route path="/login" element={<LogIn />} />

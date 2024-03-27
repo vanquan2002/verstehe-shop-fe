@@ -9,12 +9,12 @@ import CartLayout from "../components/layoutNavBarComponents/CartLayout";
 import MenuLayout from "../components/layoutNavBarComponents/MenuLayout";
 import Footer from "../components/Footer";
 import Header from "./../components/headerComponents/Header";
-import Breadcrumbs from "../components/singleProductComponents/Breadcrumbs";
 import Contents from "../components/singleProductComponents/Contents";
 import Reviews from "../components/singleProductComponents/Reviews";
 import { detailsProduct } from "../redux/actions/ProductActions";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../redux/constants/ProductConstants";
 import RelatedProducts from "./../components/singleProductComponents/RelatedProducts";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 const SingleProductScreen = () => {
   const { id } = useParams();
@@ -28,7 +28,7 @@ const SingleProductScreen = () => {
     productCreateReview;
   const setLayout = useSelector((state) => state.setLayout);
   const { result } = setLayout;
-  const setLayoutHandle = () => {
+  const resetLayoutHandle = () => {
     dispatch(setLayoutResetActions());
   };
 
@@ -59,12 +59,15 @@ const SingleProductScreen = () => {
               ? "opacity-100 pointer-events-auto"
               : "opacity-0 pointer-events-none"
           }`}
-          onClick={setLayoutHandle}
+          onClick={resetLayoutHandle}
         ></div>
         <Header />
         <>
-          <div className="px-12">
-            <Breadcrumbs />
+          <div className="px-5 md:px-12">
+            <Breadcrumbs
+              offBorderBottom={false}
+              textContent="Thông tin sản phẩm"
+            />
             <Contents
               id={id}
               loading={loading}
@@ -84,7 +87,6 @@ const SingleProductScreen = () => {
             <RelatedProducts id={id} />
           </div>
         </>
-
         <Footer />
       </div>
 

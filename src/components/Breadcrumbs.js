@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Breadcrumbs = () => {
+const Breadcrumbs = ({ offBorderBottom, textContent }) => {
   const navigate = useNavigate();
   const [path, setPath] = useState("");
 
@@ -11,7 +11,12 @@ const Breadcrumbs = () => {
   }, []);
 
   return (
-    <div className="border-b-[1px] text-sm uppercase flex items-center justify-start gap-3 border-whitePrimary border-opacity-50 pt-12 pb-5">
+    <div
+      className={`text-sm uppercase flex items-center justify-start gap-3 pt-12 ${
+        !offBorderBottom &&
+        "border-b border-whitePrimary border-opacity-50 pb-5"
+      }`}
+    >
       <p
         onClick={() => navigate("/")}
         className="text-whitePrimary text-opacity-50 font-semibold cursor-pointer"
@@ -22,7 +27,7 @@ const Breadcrumbs = () => {
         <p className="text-white font-extrabold">/</p>
         <p className="text-white font-extrabold">/</p>
       </div>
-      <p className="text-white font-bold">Thông tin sản phẩm</p>
+      <p className="text-white font-bold">{textContent}</p>
     </div>
   );
 };

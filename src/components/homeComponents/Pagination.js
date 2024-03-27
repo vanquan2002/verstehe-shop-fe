@@ -6,8 +6,8 @@ const Pagination = ({ page, pages, keyword }) => {
 
   const handlePageClick = (newPage) => {
     const route = keyword
-      ? `/search/${keyword}/page/${newPage}`
-      : `/page/${newPage}`;
+      ? `/products/search/${keyword}/page/${newPage}`
+      : `/products/page/${newPage}`;
     navigate(route);
   };
 

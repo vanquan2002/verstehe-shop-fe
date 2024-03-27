@@ -11,13 +11,13 @@ const SearchLayout = ({ result }) => {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
 
-  const layoutSearchHandle = () => {
+  const layoutResetSearchHandle = () => {
     dispatch(setLayoutResetActions());
   };
   const submitHandle = (e) => {
     e.preventDefault();
     if (keyword.trim()) {
-      navigate(`/search/${keyword}`);
+      navigate(`/products/search/${keyword}`);
     } else {
       navigate(`/`);
     }
@@ -37,25 +37,25 @@ const SearchLayout = ({ result }) => {
           : "translate-x-[500px] duration-500"
       } `}
     >
-      <div className={`w-[300px] md:w-[500px] h-screen bg-whitePrimary`}>
-        <div className="flex flex-col items-center pt-32">
-          <div className="flex justify-between items-center md:w-[22rem] w-60 mb-5">
+      <div className={`w-[350px] md:w-[500px] h-screen bg-whitePrimary`}>
+        <div className="flex flex-col items-center px-7 md:px-14 pt-32">
+          <div className="flex justify-between w-full items-center mb-5">
             <p className="text-darkPrimary font-medium">SEARCH</p>
             <MdClose
-              onClick={layoutSearchHandle}
+              onClick={layoutResetSearchHandle}
               size="1.7rem"
               className="cursor-pointer"
             />
           </div>
           <form
-            className="flex items-center justify-center"
+            className="flex items-center w-full justify-center"
             onSubmit={submitHandle}
           >
-            <div className="relative">
+            <div className="relative w-full">
               <input
                 ref={inputRef}
                 onChange={(e) => setKeyword(e.target.value)}
-                className="md:w-[22rem] w-60 px-6 py-3 placeholder:text-[0.9rem] placeholder:text-darkPrimary outline-none bg-firePrimary"
+                className="w-full px-6 py-3 placeholder:text-[0.9rem] placeholder:text-darkPrimary outline-none bg-firePrimary"
                 type="text"
                 placeholder="Tìm kiếm sản phẩm..."
                 value={keyword}
