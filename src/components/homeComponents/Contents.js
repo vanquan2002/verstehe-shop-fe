@@ -1,17 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { listProduct } from "../../redux/actions/ProductActions";
 import Loading from "../loadingError/Loading";
 import Message from "../loadingError/Error";
 import { FaAnglesRight } from "react-icons/fa6";
 
-const Contents = () => {
+const Contents = ({ loading, error, products }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
-
   const formatDataWithBr = (text) => {
     const sentences = text.split(".");
     const firstSentence = sentences[0];
@@ -19,10 +13,6 @@ const Contents = () => {
       <div className="text-whitePrimary text-sm truncate">{firstSentence}</div>
     );
   };
-
-  useEffect(() => {
-    dispatch(listProduct());
-  }, [dispatch]);
 
   return (
     <div className="p-5 my-7">

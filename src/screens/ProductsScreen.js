@@ -9,16 +9,25 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
+import { useEffect } from "react";
+import { listProduct } from "../redux/actions/ProductActions";
+import Pagination from "../components/productsComponents/Pagination";
 
 const ProductsScreen = () => {
   const { keyword } = useParams();
   const { pageNumber } = useParams();
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products, page, pages } = productList;
   const setLayout = useSelector((state) => state.setLayout);
   const { result } = setLayout;
   const dispatch = useDispatch();
   const resetLayoutHandle = () => {
     dispatch(setLayoutResetActions());
   };
+
+  useEffect(() => {
+    dispatch(listProduct(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
   return (
     <div className="bg-darkPrimary">
@@ -40,7 +49,8 @@ const ProductsScreen = () => {
         <Header />
         <div className="px-5">
           <Breadcrumbs offBorderBottom={true} textContent="Tất cả sản phẩm" />
-          <Contents keyword={keyword} pageNumber={pageNumber} />
+          <Contents loading={loading} error={error} products={products} />
+          <Pagination page={page} pages={pages} keyword={keyword} />
         </div>
         <Footer />
       </div>

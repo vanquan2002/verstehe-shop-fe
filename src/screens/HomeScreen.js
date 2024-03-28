@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../components/Footer";
 import Contents from "../components/homeComponents/Contents";
 import Introduce from "../components/homeComponents/Introduce";
@@ -10,14 +10,21 @@ import CartLayout from "../components/layoutNavBarComponents/CartLayout";
 import MenuLayout from "./../components/layoutNavBarComponents/MenuLayout";
 import Marquees from "./../components/homeComponents/Marquees";
 import Banner from "./../components/homeComponents/Banner";
+import { listProduct } from "../redux/actions/ProductActions";
 
 export default function HomeScreen() {
+  const dispatch = useDispatch();
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products } = productList;
   const setLayout = useSelector((state) => state.setLayout);
   const { result } = setLayout;
-  const dispatch = useDispatch();
   const resetLayoutHandle = () => {
     dispatch(setLayoutResetActions());
   };
+
+  useEffect(() => {
+    dispatch(listProduct());
+  }, [dispatch]);
 
   return (
     <div className="bg-darkPrimary">
@@ -41,7 +48,7 @@ export default function HomeScreen() {
           <Marquees />
           <Banner positions={"top"} />
           <Marquees />
-          <Contents />
+          <Contents loading={loading} error={error} products={products} />
           <Banner positions={"bottom"} />
           <Introduce />
         </div>

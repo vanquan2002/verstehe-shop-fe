@@ -1,17 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import Loading from "./../loadingError/Loading";
 import Message from "./../loadingError/Error";
-import { listProduct } from "./../../redux/actions/ProductActions";
-import Pagination from "../homeComponents/Pagination";
 
-const Contents = ({ keyword, pageNumber }) => {
+const Contents = ({ loading, error, products }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products, page, pages } = productList;
-
   const formatDataWithBr = (text) => {
     const sentences = text.split(".");
     const firstSentence = sentences[0];
@@ -19,10 +12,6 @@ const Contents = ({ keyword, pageNumber }) => {
       <div className="text-whitePrimary text-sm truncate">{firstSentence}</div>
     );
   };
-
-  useEffect(() => {
-    dispatch(listProduct(keyword, pageNumber));
-  }, [dispatch, keyword, pageNumber]);
 
   return (
     <div className="my-7">
@@ -54,7 +43,6 @@ const Contents = ({ keyword, pageNumber }) => {
           ))}
         </div>
       )}
-      <Pagination page={page} pages={pages} keyword={keyword} />
     </div>
   );
 };

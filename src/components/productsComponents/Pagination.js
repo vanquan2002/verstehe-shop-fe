@@ -18,7 +18,7 @@ const Pagination = ({ page, pages, keyword }) => {
           onClick={() => handlePageClick(Math.max(1, page - 1))}
           className="text-firePrimary cursor-pointer"
         >
-          pre
+          prev
         </div>
         {Array.from({ length: pages }, (_, x) => x + 1).map((x) => (
           <div
@@ -39,7 +39,7 @@ const Pagination = ({ page, pages, keyword }) => {
           onClick={() => handlePageClick(Math.min(pages, page + 1))}
           className="text-firePrimary cursor-pointer"
         >
-          nex
+          next
         </div>
       </div>
     )

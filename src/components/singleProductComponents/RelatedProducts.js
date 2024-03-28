@@ -50,12 +50,12 @@ function SampleArrow(props) {
   );
 }
 
-const RelatedProducts = ({ id }) => {
-  const dispatch = useDispatch();
+const RelatedProducts = ({
+  products,
+  loadingProductsRelated,
+  errorProductsRelated,
+}) => {
   const navigate = useNavigate();
-  const productsRelated = useSelector((state) => state.productsRelated);
-  const { products, loading, error } = productsRelated;
-
   const formatDataWithBr = (text) => {
     const sentences = text.split(".");
     const firstSentence = sentences[0];
@@ -64,7 +64,7 @@ const RelatedProducts = ({ id }) => {
     );
   };
   const settings = {
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -83,29 +83,25 @@ const RelatedProducts = ({ id }) => {
     };
   }, []);
 
-  useEffect(() => {
-    dispatch(relatedProducts(id));
-  }, [dispatch, id]);
-
   return (
     <ContainerStyled className="mb-7 mt-10">
       <p className="uppercase font-semibold text-whitePrimary text-lg ">
         Các sản phẩm liên quan
       </p>
-      <div
-        className={`slider-container mt-3 ${
-          windowWidth > 1024 && "border border-whitePrimary border-opacity-50"
-        }`}
-      >
-        {loading ? (
-          <Loading />
-        ) : error ? (
-          <Message>{error}</Message>
-        ) : (
+      {loadingProductsRelated ? (
+        <Loading />
+      ) : errorProductsRelated ? (
+        <Message>{errorProductsRelated}</Message>
+      ) : (
+        <div
+          className={`slider-container mt-3 ${
+            windowWidth > 1024 && "border border-whitePrimary border-opacity-50"
+          }`}
+        >
           <div>
             {windowWidth > 1024 ? (
               <Slider {...settings}>
-                {products.map((product, i) => (
+                {products?.map((product, i) => (
                   <div
                     style={{ margin: "10px" }}
                     onClick={() => navigate(`/products/${product._id}`)}
@@ -152,8 +148,8 @@ const RelatedProducts = ({ id }) => {
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </ContainerStyled>
   );
 };
